@@ -7,7 +7,8 @@
 let operaciones =[];
 let balance = 0;
 const registrarOperacion = (monto, tipo, categoria, fecha) =>{
-
+    operacion_ind ={monto);
+    
 }
 
 const registrarMetaAhorro = (meta)=>{
