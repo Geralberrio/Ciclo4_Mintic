@@ -1,41 +1,20 @@
-let operaciones=[];
-let balance = 0;
+const express = require("express");
+const app = express();
 
-const registrarOperacion = (monto, tipo, categoria, fecha)=>{
-    
-    /*Añadir objetos al arreglo*/
-    operaciones.push({"monto":monto, "tipo":tipo, "categoria":categoria, "fecha":fecha});  
-    tipo==='ingreso'? balance+=monto:balance-=monto;
+//hay un array que se llama operations que contiene las operaciones de la base de datos
+
+app.use(express.urlencoded({extend: false}));
+app.use(express.json());
+
+app.post(/api/personal-finance/operations,(req,res)=>{
+    //código para insertar operaciones se debe insertar la operación que esta en el req.body y hacer push del objeto al array operations, debe retornar el array de operations como json
+});
+
+app.get(/api/personal-finance/is-my-goal-achieved/:amount,(req,res)=>{
+   //código para la meta de ahorro
+   amount = req.params
+   amount = parseInt(amount);
    
-   /* el condicional*/
-    /*
-    if ( tipo=== 'ingreso'){
-        balance+=monto;  
-    } else
-        {balance-=monto;}
-    
-    /*Guardar en loscalstorage*/
-    localStorage.setItem("operaciones", JSON.stringify(operaciones));
-    localStorage.setItem("balance",JSON.stringify(balance));
-};
+});
 
-let metaAhorro =0;
-const registrarMetaAhorro=(meta)=>{
-    localStorage.setItem("metaAhorro", meta);
-};
-
-const estaMiMetaCumplida=()=> {
-    metaAhorro = parseFloat(localStorage.getItem("metaAhorro"));
-    balance = parseFloat(localStorage.getItem("balance"));
-    
-    if (metaAhorro<balance){
-        return "cumple";
-    }
-    else 
-    {
-        return "no cumple";}
-};
-
-module.exports.estaMiMetaCumplida= estaMiMetaCumplida;
-module.exports.registrarMetaAhorro= registrarMetaAhorro;
-module.exports.registrarOperacion= registrarOperacion;
+module.exports = app;
