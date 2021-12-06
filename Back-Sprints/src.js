@@ -1,41 +1,26 @@
-let operaciones=[];
 let balance = 0;
 
-const registrarOperacion = (monto, tipo, categoria, fecha)=>{
-    
-    /*Añadir objetos al arreglo*/
-    operaciones.push({"monto":monto, "tipo":tipo, "categoria":categoria, "fecha":fecha});  
+const registrarOperacion = async(monto, tipo, categoria, fecha)=>{
+    let operacion ={monto,tipo,categoria,fecha};  
     tipo==='ingreso'? balance+=monto:balance-=monto;
-   
-   /* el condicional*/
-    /*
-    if ( tipo=== 'ingreso'){
-        balance+=monto;  
-    } else
-        {balance-=monto;}
-    
-    /*Guardar en loscalstorage*/
-    localStorage.setItem("operaciones", JSON.stringify(operaciones));
-    localStorage.setItem("balance",JSON.stringify(balance));
+    let response = await fetch("https://misiontic2022upb.vercel.app/api/personal-finance/operations",{
+        method: 'POST',
+        headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(operacion),
+    });
+    return (response.json());
 };
 
-let metaAhorro =0;
-const registrarMetaAhorro=(meta)=>{
-    localStorage.setItem("metaAhorro", meta);
-};
-
-const estaMiMetaCumplida=()=> {
-    metaAhorro = parseFloat(localStorage.getItem("metaAhorro"));
-    balance = parseFloat(localStorage.getItem("balance"));
-    
-    if (metaAhorro<balance){
-        return "cumple";
-    }
-    else 
-    {
-        return "no cumple";}
+const estaMiMetaCumplida=async()=> {
+    let response = await fetch(
+        "https://misiontic2022upb.vercel.app/api/personal-finance/is-my-goal-achieved/4000"
+    );
+    let estaMiMetaCumplida = await response.json();
+    return estaMiMetaCumplida;
 };
 
 module.exports.estaMiMetaCumplida= estaMiMetaCumplida;
-module.exports.registrarMetaAhorro= registrarMetaAhorro;
 module.exports.registrarOperacion= registrarOperacion;
